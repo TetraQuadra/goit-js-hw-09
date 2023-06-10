@@ -10,7 +10,7 @@ const options = {
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
     if (selectedDate < new Date()) {
-      Notiflix.Notify.warning('Please choose a date in the future');
+       Notiflix.Notify.warning('Please choose a date in the future');
       buttonStart.disabled = true;
     } else {
       buttonStart.disabled = false;
@@ -29,6 +29,13 @@ const secondsValue = document.querySelector('[data-seconds]');
 let countdownIntervalId;
 
 buttonStart.addEventListener('click', () => {
+  const selectedDate = new Date(
+    document.querySelector('#datetime-picker').value
+  );
+  if (selectedDate < new Date()) {
+    Notiflix.Notify.warning('Please choose a date in the future');
+    return;
+  }
   buttonStart.disabled = true;
   startCountdown(selectedDate);
 });
