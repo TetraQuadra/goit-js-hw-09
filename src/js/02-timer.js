@@ -10,7 +10,7 @@ const options = {
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
     if (selectedDate < new Date()) {
-      window.alert('Please choose a date in the future');
+      Notiflix.Notify.warning('Please choose a date in the future');
       buttonStart.disabled = true;
     } else {
       buttonStart.disabled = false;
@@ -29,13 +29,6 @@ const secondsValue = document.querySelector('[data-seconds]');
 let countdownIntervalId;
 
 buttonStart.addEventListener('click', () => {
-  const selectedDate = new Date(
-    document.querySelector('#datetime-picker').value
-  );
-  if (selectedDate < new Date()) {
-    Notiflix.Notify.warning('Please choose a date in the future');
-    return;
-  }
   buttonStart.disabled = true;
   startCountdown(selectedDate);
 });
@@ -43,10 +36,10 @@ buttonStart.addEventListener('click', () => {
 function startCountdown(selectedDate) {
   function updateCountdown() {
     const timeLeft = getTimeRemaining(selectedDate);
-    daysValue.textContent = timeLeft.days;
-    hoursValue.textContent = timeLeft.hours;
-    minutesValue.textContent = timeLeft.minutes;
-    secondsValue.textContent = timeLeft.seconds;
+    daysValue.textContent = addLeadingZero(timeLeft.days);
+    hoursValue.textContent = addLeadingZero(timeLeft.hours);
+    minutesValue.textContent = addLeadingZero(timeLeft.minutes);
+    secondsValue.textContent = addLeadingZero(timeLeft.seconds);
     if (timeLeft.total <= 1000) {
       clearInterval(countdownIntervalId);
       buttonStart.disabled = false;
@@ -56,6 +49,10 @@ function startCountdown(selectedDate) {
 
   updateCountdown();
   countdownIntervalId = setInterval(updateCountdown, 1000);
+}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }
 
 function getTimeRemaining(endDate) {
